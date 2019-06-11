@@ -1,0 +1,38 @@
+<idea-plugin>
+  <id>Casper/api-generator</id>
+  <name>api-generator</name>
+  <vendor email="326713510@qq.com" url="">Casper</vendor>
+
+  <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+    ]]></description>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+    <applicationConfigurable id="api-generator" displayName="api-generator"
+      instance="org.r.idea.plugin.generator.api.config.PluginConfig"/>
+    <applicationService serviceInterface="org.r.idea.plugin.generator.api.service.StorageService"
+      serviceImplementation="org.r.idea.plugin.generator.api.service.impl.StorageServiceImpl"/>
+    <applicationService serviceInterface="org.r.idea.plugin.generator.api.service.ConfigConvertor"
+      serviceImplementation="org.r.idea.plugin.generator.api.service.impl.ConfigConvertorImpl"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+    <group text="testMenu" id="testMenu" description="testMenu">
+      <add-to-group group-id="MainMenu" anchor="last"/>
+      <action id="Generator.api.generate" class="org.r.idea.plugin.generator.api.Generate" text="Generate"
+        description="generate the api doc">
+        <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt G"/>
+        <add-to-group group-id="GenerateGroup" anchor="last"/>
+      </action>
+    </group>
+  </actions>
+</idea-plugin>
