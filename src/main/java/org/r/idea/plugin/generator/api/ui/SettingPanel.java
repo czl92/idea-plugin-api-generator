@@ -1,105 +1,113 @@
 package org.r.idea.plugin.generator.api.ui;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JTabbedPane;
+import org.r.idea.plugin.generator.api.Constants;
 import org.r.idea.plugin.generator.api.beans.SettingState;
 
 /**
  * @ClassName SettingPanel
  * @Author Casper
- * @DATE 2019/6/10 9:37
+ * @DATE 2019/6/12 17:33
  **/
 public class SettingPanel {
 
-    private JTextField srcFileText;
-    private JTextField intrFileText;
-    private JTextField outputFileText;
-    private JTextField baseClassText;
-    private JTextField collClassText;
-    private JTextField nonsupClassText;
-    private JTextField templatePathText;
-    private JButton srcFileSelectBut;
-    private JButton intrFileBut;
-    private JButton outputFileBut;
-    private JButton baseClassBut;
-    private JButton collClassBut;
-    private JButton nonsupClassBut;
-    private JPanel mainPanel;
-    private JButton templateBut;
-    private JLabel templatePath;
-
+    private JTabbedPane tabbedPane1;
+    private JPanel main;
+    private TablePathPanel srcPathPanel = new TablePathPanel();
+    private TablePathPanel interfacePathPanel = new TablePathPanel();
+    private OtherSettingPanel otherSettingPanel = new OtherSettingPanel();
 
     public JComponent getPanel(SettingState state) {
+
+        createUIComponents(state);
+        return main;
+    }
+
+
+    private void createUIComponents(SettingState state) {
+        tabbedPane1.add("src file path", srcPathPanel.getMain());
+        tabbedPane1.add("interface file path", interfacePathPanel.getMain());
+        tabbedPane1.add("other setting", otherSettingPanel.getMain(null));
         if (state != null) {
             setSrcFilePathText(state.getSrcFilePaths());
             setInterfaceFileText(state.getInterfaceFilePaths());
-            setOutputFileText(state.getOutputFilePaths());
-            setBaseClassText(state.getBaseClass());
-            setCollectionClassText(state.getCollectionClass());
-            setNonsupportClassText(state.getNonsupportClass());
             setTemplateText(state.getTemplateFilePaths());
+            setOutputFileText(state.getOutputFilePaths());
+            setNonsupportClassText(state.getNonsupportClass());
+            setCollectionClassText(state.getCollectionClass());
+            setBaseClassText(state.getBaseClass());
         }
 
-        return mainPanel;
+
     }
 
     public String getSrcFilePathText() {
-        return srcFileText.getText();
+        return srcPathPanel.getPath();
+    }
+
+    public void setSrcFilePathText(String srcFilePathText) {
+        if (isNotVaildPath(srcFilePathText)) {
+            return;
+        }
+        srcPathPanel.setPath(srcFilePathText.split(Constants.SPLITOR));
     }
 
     public String getInterfaceFileText() {
-        return intrFileText.getText();
+        return interfacePathPanel.getPath();
+    }
+
+    public void setInterfaceFileText(String interfaceFileText) {
+        if (isNotVaildPath(interfaceFileText)) {
+            return;
+        }
+        interfacePathPanel.setPath(interfaceFileText.split(Constants.SPLITOR));
     }
 
     public String getOutputFileText() {
-        return outputFileText.getText();
-    }
-
-    public String getBaseClassText() {
-        return baseClassText.getText();
-    }
-
-    public String getCollectionClassText() {
-        return collClassText.getText();
-    }
-
-    public String getNonsupportClassText() {
-        return nonsupClassText.getText();
-    }
-
-    public String getTemplateText() {
-        return templatePathText.getText();
-    }
-
-    public void setSrcFilePathText(String text) {
-        srcFileText.setText(text);
-    }
-
-    public void setInterfaceFileText(String text) {
-        intrFileText.setText(text);
+        return otherSettingPanel.getOutputFileText();
     }
 
     public void setOutputFileText(String text) {
-        outputFileText.setText(text);
+        otherSettingPanel.setOutputFileText(text);
+    }
+
+    public String getBaseClassText() {
+        return otherSettingPanel.getBaseClassText();
     }
 
     public void setBaseClassText(String text) {
-        baseClassText.setText(text);
+        otherSettingPanel.setBaseClassText(text);
+    }
+
+    public String getCollectionClassText() {
+        return otherSettingPanel.getCollectionClassText();
     }
 
     public void setCollectionClassText(String text) {
-        collClassText.setText(text);
+        otherSettingPanel.setCollectionClassText(text);
+    }
+
+    public String getNonsupportClassText() {
+        return otherSettingPanel.getNonsupportClassText();
     }
 
     public void setNonsupportClassText(String text) {
-        nonsupClassText.setText(text);
+        otherSettingPanel.setNonsupportClassText(text);
+    }
+
+    public String getTemplateText() {
+        return otherSettingPanel.getTemplateText();
     }
 
     public void setTemplateText(String text) {
-        templatePathText.setText(text);
+        otherSettingPanel.setTemplateText(text);
+    }
+
+
+    private boolean isNotVaildPath(String path) {
+        return path == null || "".equals(path);
     }
 
 
