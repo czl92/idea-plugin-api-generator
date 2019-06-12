@@ -90,9 +90,15 @@ public class PluginConfig implements SearchableConfigurable {
             if (!state.getCollectionClass().equals(settingPanel.getCollectionClassText())) {
                 return true;
             }
-            return !state.getNonsupportClass().equals(settingPanel.getNonsupportClassText());
+            if (!state.getTemplateFilePaths().equals(settingPanel.getTemplateText())) {
+                return true;
+            }
+            if (!state.getNonsupportClass().equals(settingPanel.getNonsupportClassText())) {
+                return true;
+            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -110,7 +116,7 @@ public class PluginConfig implements SearchableConfigurable {
         state.setBaseClass(settingPanel.getBaseClassText());
         state.setCollectionClass(settingPanel.getCollectionClassText());
         state.setNonsupportClass(settingPanel.getNonsupportClassText());
-
+        state.setTemplateFilePaths(settingPanel.getTemplateText());
         storageService.loadState(state);
     }
 }

@@ -2,6 +2,7 @@ package org.r.idea.plugin.generator.api.ui;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.r.idea.plugin.generator.api.beans.SettingState;
@@ -19,6 +20,7 @@ public class SettingPanel {
     private JTextField baseClassText;
     private JTextField collClassText;
     private JTextField nonsupClassText;
+    private JTextField templatePathText;
     private JButton srcFileSelectBut;
     private JButton intrFileBut;
     private JButton outputFileBut;
@@ -26,6 +28,8 @@ public class SettingPanel {
     private JButton collClassBut;
     private JButton nonsupClassBut;
     private JPanel mainPanel;
+    private JButton templateBut;
+    private JLabel templatePath;
 
 
     public JComponent getPanel(SettingState state) {
@@ -36,6 +40,7 @@ public class SettingPanel {
             setBaseClassText(state.getBaseClass());
             setCollectionClassText(state.getCollectionClass());
             setNonsupportClassText(state.getNonsupportClass());
+            setTemplateText(state.getTemplateFilePaths());
         }
 
         return mainPanel;
@@ -65,6 +70,10 @@ public class SettingPanel {
         return nonsupClassText.getText();
     }
 
+    public String getTemplateText() {
+        return templatePathText.getText();
+    }
+
     public void setSrcFilePathText(String text) {
         srcFileText.setText(text);
     }
@@ -87,6 +96,10 @@ public class SettingPanel {
 
     public void setNonsupportClassText(String text) {
         nonsupClassText.setText(text);
+    }
+
+    public void setTemplateText(String text) {
+        templatePathText.setText(text);
     }
 
 

@@ -22,6 +22,10 @@ public class SettingState {
      */
     private String outputFilePaths;
     /**
+     * 持久化的模板文件目录路径
+     */
+    private String templateFilePaths;
+    /**
      * 持久化的基本类型
      */
     private String baseClass;
@@ -80,5 +84,13 @@ public class SettingState {
 
     public void setNonsupportClass(String nonsupportClass) {
         this.nonsupportClass = nonsupportClass;
+    }
+
+    public String getTemplateFilePaths() {
+        return templateFilePaths;
+    }
+
+    public void setTemplateFilePaths(String templateFilePaths) {
+        this.templateFilePaths = templateFilePaths;
     }
 }
