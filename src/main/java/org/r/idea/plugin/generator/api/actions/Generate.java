@@ -1,4 +1,4 @@
-package org.r.idea.plugin.generator.api;
+package org.r.idea.plugin.generator.api.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
