@@ -58,7 +58,7 @@ public class OtherSettingPanel {
             boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
             if (isOk) {
                 String pathText = fileTree.getPathText();
-                setOutputFileText(pathText);
+                setOutputFileText(pathText.replace('\\','/'));
             }
         });
         templateBut.addActionListener(e -> {
@@ -70,7 +70,7 @@ public class OtherSettingPanel {
             boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
             if (isOk) {
                 String pathText = fileTree.getPathText();
-                setTemplateText(pathText);
+                setTemplateText(pathText.replace('\\','/'));
             }
         });
     }

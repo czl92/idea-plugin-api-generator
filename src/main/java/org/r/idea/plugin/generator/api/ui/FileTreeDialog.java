@@ -36,16 +36,12 @@ import org.r.idea.plugin.generator.api.ui.component.MyTreeNode;
  * @Author Casper
  * @DATE 2019/6/13 9:32
  **/
-public class FileTreeDialog extends JDialog {
+public class FileTreeDialog{
 
     private JTextField pathText;
     private JPanel main;
     private JScrollPane treePanel;
     private Tree fileTree;
-
-
-    public FileTreeDialog() {
-    }
 
     public JPanel getMain() {
 
