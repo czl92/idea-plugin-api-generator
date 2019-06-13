@@ -50,29 +50,26 @@ public class OtherSettingPanel {
 
     private void initButton() {
         outputFileBut.addActionListener(e -> {
-            DialogBuilder builder = new DialogBuilder();
-            builder.centerPanel(fileTree.getMain());
-            builder.removeAllActions();
-            builder.addOkAction();
-            builder.addCancelAction();
-            boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
-            if (isOk) {
-                String pathText = fileTree.getPathText();
-                setOutputFileText(pathText.replace('\\','/'));
-            }
+            String path = showDialog();
+            setOutputFileText(path);
         });
         templateBut.addActionListener(e -> {
-            DialogBuilder builder = new DialogBuilder();
-            builder.centerPanel(fileTree.getMain());
-            builder.removeAllActions();
-            builder.addOkAction();
-            builder.addCancelAction();
-            boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
-            if (isOk) {
-                String pathText = fileTree.getPathText();
-                setTemplateText(pathText.replace('\\','/'));
-            }
+            String path = showDialog();
+            setTemplateText(path);
         });
+    }
+
+    private String showDialog() {
+        DialogBuilder builder = new DialogBuilder();
+        builder.centerPanel(fileTree.getMain());
+        builder.removeAllActions();
+        builder.addOkAction();
+        builder.addCancelAction();
+        boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
+        if (isOk) {
+            return fileTree.getPathText().replace('\\', '/');
+        }
+        return null;
     }
 
 

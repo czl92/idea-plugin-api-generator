@@ -14,6 +14,11 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -36,7 +41,7 @@ import org.r.idea.plugin.generator.api.ui.component.MyTreeNode;
  * @Author Casper
  * @DATE 2019/6/13 9:32
  **/
-public class FileTreeDialog{
+public class FileTreeDialog {
 
     private JTextField pathText;
     private JPanel main;
@@ -54,11 +59,10 @@ public class FileTreeDialog{
     public void init(String initPath) {
 
         File[] files = File.listRoots();
-
+        List<File> fileList = sortFile(files);
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-        for (File file : files) {
+        for (File file : fileList) {
             MyTreeNode node = new MyTreeNode(file.getPath().substring(0, 1), file);
-
             root.add(node);
         }
         DefaultTreeModel defaultTreeModel = new DefaultTreeModel(root);
@@ -124,12 +128,18 @@ public class FileTreeDialog{
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files != null) {
-                for (File tmp : files) {
+                List<File> fileList = sortFile(files);
+                for (File tmp : fileList) {
                     MyTreeNode childNode = new MyTreeNode(tmp.getName(), tmp);
                     node.add(childNode);
                 }
             }
         }
+    }
+
+    private List<File> sortFile(File[] file) {
+        List<File> fileList = new ArrayList<>(Arrays.asList(file));
+        return fileList.stream().sorted(Comparator.comparing(File::getName)).collect(Collectors.toList());
     }
 
 
