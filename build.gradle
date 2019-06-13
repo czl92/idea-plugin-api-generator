@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'org.r.idea.plugin'
-version '1.1'
+version '1.2'
 
 sourceCompatibility = 1.8
 
@@ -21,7 +21,8 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2018.1'
+    version '2018.3'
+    
 }
 patchPluginXml {
     changeNotes """

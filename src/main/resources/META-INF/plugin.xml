@@ -3,6 +3,8 @@
   <name>api-generator</name>
   <vendor email="326713510@qq.com" url="">Casper</vendor>
 
+  <idea-version since-build="181" until-build="191.*" />
+
   <description><![CDATA[
     Enter short description for your plugin here.<br>
     <em>most HTML tags may be used</em>
