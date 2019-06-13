@@ -28,7 +28,9 @@ public class SettingPanel {
 
     private void createUIComponents(SettingState state) {
         tabbedPane1.add("src file path", srcPathPanel.getMain());
+        srcPathPanel.setTitle("选择源代码目录路径");
         tabbedPane1.add("interface file path", interfacePathPanel.getMain());
+        interfacePathPanel.setTitle("选择接口文件目录路径");
         tabbedPane1.add("other setting", otherSettingPanel.getMain(null));
         if (state != null) {
             setSrcFilePathText(state.getSrcFilePaths());

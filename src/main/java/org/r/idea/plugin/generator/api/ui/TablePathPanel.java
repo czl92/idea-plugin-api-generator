@@ -1,5 +1,9 @@
 package org.r.idea.plugin.generator.api.ui;
 
+import com.intellij.openapi.ui.DialogBuilder;
+import com.intellij.openapi.ui.DialogWrapper;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,13 +17,15 @@ import javax.swing.table.TableModel;
  * @Author Casper
  * @DATE 2019/6/12 18:38
  **/
-public class TablePathPanel {
+public class TablePathPanel implements ActionListener {
 
     private JLabel title;
     private JButton addBut;
     private JButton delBut;
     private JTable pathTable;
     private JPanel main;
+
+    private FileTreeDialog fileTreeDialog = new FileTreeDialog();
 
 
     public JPanel getMain() {
@@ -29,13 +35,7 @@ public class TablePathPanel {
         header.add("路径");
         model.setColumnIdentifiers(header);
         pathTable.setModel(model);
-
-        addBut.addActionListener(e -> {
-            DefaultTableModel model1 = (DefaultTableModel) pathTable.getModel();
-            String[] tmp = {"test"};
-            model1.addRow(tmp);
-            pathTable.setModel(model1);
-        });
+        addBut.addActionListener(this);
 
         delBut.addActionListener(e -> {
             DefaultTableModel model1 = (DefaultTableModel) pathTable.getModel();
@@ -65,12 +65,41 @@ public class TablePathPanel {
             return;
         }
         DefaultTableModel model = (DefaultTableModel) pathTable.getModel();
-        for (int i = 0; i < srcPath.length; i++) {
+        for (String s : srcPath) {
             Vector<String> tmp = new Vector<>();
-            tmp.add(srcPath[i]);
+            tmp.add(s);
             model.addRow(tmp);
         }
         pathTable.setModel(model);
     }
 
+    /**
+     * Invoked when an action occurs.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        DialogBuilder builder = new DialogBuilder(main);
+        builder.setCenterPanel(fileTreeDialog.getMain());
+        builder.setTitle("选择目录");
+        builder.removeAllActions();
+        builder.addOkAction();
+        builder.addCancelAction();
+        boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
+        if (isOk) {
+            String pathText = fileTreeDialog.getPathText();
+
+            String[] tmp = {pathText.replace('\\', '/')};
+            setPath(tmp);
+        }
+
+    }
+
+    public String getTitle() {
+        return title.getText();
+    }
+
+    public void setTitle(String title) {
+        this.title.setText(title);
+    }
 }

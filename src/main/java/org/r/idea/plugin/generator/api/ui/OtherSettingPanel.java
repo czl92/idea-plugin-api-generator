@@ -1,5 +1,7 @@
 package org.r.idea.plugin.generator.api.ui;
 
+import com.intellij.openapi.ui.DialogBuilder;
+import com.intellij.openapi.ui.DialogWrapper;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -20,14 +22,17 @@ public class OtherSettingPanel {
     private JTextField nonsupClassText;
     private JTextField templatePathText;
     private JButton outputFileBut;
-    private JPanel mainPanel;
     private JButton templateBut;
     private JLabel templatePath;
+    private JPanel mainPanel;
+
+    private FileTreeDialog fileTree = new FileTreeDialog();
 
 
     public JPanel getMain(SettingState state) {
 
         initText(state);
+        initButton();
 
         return mainPanel;
     }
@@ -41,6 +46,33 @@ public class OtherSettingPanel {
         setCollectionClassText(state.getCollectionClass());
         setNonsupportClassText(state.getNonsupportClass());
         setTemplateText(state.getTemplateFilePaths());
+    }
+
+    private void initButton() {
+        outputFileBut.addActionListener(e -> {
+            DialogBuilder builder = new DialogBuilder();
+            builder.centerPanel(fileTree.getMain());
+            builder.removeAllActions();
+            builder.addOkAction();
+            builder.addCancelAction();
+            boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
+            if (isOk) {
+                String pathText = fileTree.getPathText();
+                setOutputFileText(pathText);
+            }
+        });
+        templateBut.addActionListener(e -> {
+            DialogBuilder builder = new DialogBuilder();
+            builder.centerPanel(fileTree.getMain());
+            builder.removeAllActions();
+            builder.addOkAction();
+            builder.addCancelAction();
+            boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
+            if (isOk) {
+                String pathText = fileTree.getPathText();
+                setTemplateText(pathText);
+            }
+        });
     }
 
 

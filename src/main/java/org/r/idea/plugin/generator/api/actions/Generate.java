@@ -19,6 +19,7 @@ public class Generate extends AnAction {
         Project project = e.getProject();
         ProgressManager.getInstance().run(new BuildTask(project, "build doc"));
 
+
     }
 
 
