@@ -1,35 +1,23 @@
 package org.r.idea.plugin.generator.api.ui;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.icons.AllIcons.Nodes;
-import com.intellij.openapi.ui.MasterDetailsComponent.MyNode;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -37,7 +25,6 @@ import javax.swing.tree.ExpandVetoException;
 import org.jetbrains.annotations.NotNull;
 import org.r.idea.plugin.generator.api.StringUtils;
 import org.r.idea.plugin.generator.api.ui.component.MyTreeNode;
-import org.r.idea.plugin.generator.api.util.NodeUtil;
 
 /**
  * @ClassName FileTreeDialog

@@ -2,33 +2,36 @@ plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.4.9'
 }
+def ideaVersion = '2018.3'
+def pluginGroup = 'org.r.idea.plugin'
+def pluginVersion = '1.2' + "-" + ideaVersion
 
-group 'org.r.idea.plugin'
-version '1.2'
+
+group pluginGroup
+version pluginVersion
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
     mavenLocal()
-//    maven { url "file://F:/maven/repository" }
-    maven { url "file:///opt/.m2/repository" }
+    maven { url "file://D:/maven/repository" }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group:'org.r.generator.api', name: 'core', version: '1.0'
+    compile group: 'org.r.generator.api', name: 'core', version: '1.0'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2018.3'
-    
+    version ideaVersion
+
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+        优化设置界面
+      """
 }
 
 tasks.withType(JavaCompile) {
