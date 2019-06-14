@@ -13,7 +13,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -30,6 +37,7 @@ import javax.swing.tree.ExpandVetoException;
 import org.jetbrains.annotations.NotNull;
 import org.r.idea.plugin.generator.api.StringUtils;
 import org.r.idea.plugin.generator.api.ui.component.MyTreeNode;
+import org.r.idea.plugin.generator.api.util.NodeUtil;
 
 /**
  * @ClassName FileTreeDialog
@@ -42,6 +50,22 @@ public class FileTreeDialog{
     private JPanel main;
     private JScrollPane treePanel;
     private Tree fileTree;
+
+    public FileTreeDialog() {
+        pathText.addKeyListener(new KeyAdapter() {
+
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                fileTree.repaint();
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileTree.getModel().getRoot();
+                MyTreeNode child = (MyTreeNode) node.getFirstChild();
+                System.out.println(child.getTitle());
+                System.out.println(child.getChildCount());
+                child.remove(1);
+            }
+        });
+    }
 
     public JPanel getMain() {
 
@@ -56,11 +80,14 @@ public class FileTreeDialog{
         File[] files = File.listRoots();
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+        List<MyTreeNode> myTreeNodes = new ArrayList<>();
         for (File file : files) {
             MyTreeNode node = new MyTreeNode(file.getPath().substring(0, 1), file);
-
-            root.add(node);
+            System.out.println(node.getFilePath() + "  " + node.getTitle());
+            myTreeNodes.add(node);
         }
+        myTreeNodes = myTreeNodes.stream().sorted((Comparator.comparing(MyTreeNode::getFilePath))).collect(Collectors.toList());
+        myTreeNodes.forEach(root::add);
         DefaultTreeModel defaultTreeModel = new DefaultTreeModel(root);
 
         fileTree.setModel(defaultTreeModel);
@@ -121,13 +148,19 @@ public class FileTreeDialog{
             return;
         }
         node.removeAllChildren();
+        List<MyTreeNode> myTreeNodeList = new ArrayList<>();
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files != null) {
                 for (File tmp : files) {
+                    if (tmp.isFile()) {
+                        continue;
+                    }
                     MyTreeNode childNode = new MyTreeNode(tmp.getName(), tmp);
-                    node.add(childNode);
+                    myTreeNodeList.add(childNode);
                 }
+                myTreeNodeList = myTreeNodeList.stream().sorted((Comparator.comparing(MyTreeNode::getFilePath))).collect(Collectors.toList());
+                myTreeNodeList.forEach(node::add);
             }
         }
     }
