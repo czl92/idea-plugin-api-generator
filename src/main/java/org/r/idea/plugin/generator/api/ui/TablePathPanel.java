@@ -1,16 +1,29 @@
 package org.r.idea.plugin.generator.api.ui;
 
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.vfs.VirtualFile;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import org.r.idea.plugin.generator.api.Constants;
+import org.r.idea.plugin.generator.api.StringUtils;
+import org.r.idea.plugin.generator.api.util.FilePathUtil;
 
 /**
  * @ClassName TablePathPanel
@@ -38,10 +51,12 @@ public class TablePathPanel implements ActionListener {
         addBut.addActionListener(this);
 
         delBut.addActionListener(e -> {
-            DefaultTableModel model1 = (DefaultTableModel) pathTable.getModel();
-            pathTable.getSelectedRow();
-            model1.removeRow(pathTable.getSelectedRow());
-            pathTable.setModel(model1);
+            DefaultTableModel tmp = (DefaultTableModel) pathTable.getModel();
+            int[] selectedRows = pathTable.getSelectedRows();
+            for(int i = selectedRows.length-1;i>=0;i--){
+                tmp.removeRow(selectedRows[i]);
+            }
+            pathTable.setModel(tmp);
         });
         return main;
     }
@@ -59,10 +74,20 @@ public class TablePathPanel implements ActionListener {
         return sb.toString();
     }
 
-
     public void setPath(String[] srcPath) {
+        setPath(new ArrayList<>(Arrays.asList(srcPath)));
+    }
+
+    public void setPath(List<String> srcPath) {
         if (srcPath == null) {
             return;
+        }
+        /*获取现有的路径*/
+        String path = getPath();
+        /*如果现有的路径存在，则先过滤重复的*/
+        if (StringUtils.isNotEmpty(path)) {
+            List<String> tmp = new ArrayList<>(Arrays.asList(path.split(Constants.SPLITOR)));
+            srcPath.removeAll(tmp);
         }
         DefaultTableModel model = (DefaultTableModel) pathTable.getModel();
         for (String s : srcPath) {
@@ -73,25 +98,28 @@ public class TablePathPanel implements ActionListener {
         pathTable.setModel(model);
     }
 
+
     /**
      * Invoked when an action occurs.
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        DialogBuilder builder = new DialogBuilder(main);
-        builder.setCenterPanel(fileTreeDialog.getMain());
-        builder.setTitle("选择目录");
-        builder.removeAllActions();
-        builder.addOkAction();
-        builder.addCancelAction();
-        boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
-        if (isOk) {
-            String pathText = fileTreeDialog.getPathText();
-
-            String[] tmp = {pathText.replace('\\', '/')};
-            setPath(tmp);
+        Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+        Project curProject = null;
+        if (openProjects.length > 0) {
+            curProject = openProjects[0];
         }
+        FileChooser.chooseFiles(
+            new FileChooserDescriptor(false, true, false, false, false, true),
+            curProject,
+            null,
+            t -> {
+                List<String> result = new ArrayList<>();
+                for (int i = 0; i < t.size(); i++) {
+                    result.add(FilePathUtil.formatPath(t.get(i).getPath()));
+                }
+                setPath(result);
+            });
 
     }
 

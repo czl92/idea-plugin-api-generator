@@ -1,7 +1,10 @@
 package org.r.idea.plugin.generator.api.config;
 
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.intellij.openapi.project.ProjectManager;
+import java.util.Objects;
 import javax.swing.JComponent;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nls.Capitalization;
@@ -62,6 +65,7 @@ public class PluginConfig implements SearchableConfigurable {
         if (null == settingPanel) {
             settingPanel = new SettingPanel();
         }
+
         return settingPanel.getPanel(storageService.getState());
     }
 
@@ -118,5 +122,15 @@ public class PluginConfig implements SearchableConfigurable {
         state.setNonsupportClass(settingPanel.getNonsupportClassText());
         state.setTemplateFilePaths(settingPanel.getTemplateText());
         storageService.loadState(state);
+    }
+
+
+    /**
+     * Loads the settings from the configurable component to the Swing form. This method is called on EDT immediately
+     * after the form creation or later upon user's request.
+     */
+    @Override
+    public void reset() {
+        settingPanel.init(Objects.requireNonNull(storageService.getState()));
     }
 }

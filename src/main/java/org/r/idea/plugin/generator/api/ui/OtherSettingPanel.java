@@ -1,13 +1,22 @@
 package org.r.idea.plugin.generator.api.ui;
 
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.vfs.VirtualFile;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.r.idea.plugin.generator.api.StringUtils;
 import org.r.idea.plugin.generator.api.beans.SettingState;
+import org.r.idea.plugin.generator.api.util.FilePathUtil;
 
 /**
  * @ClassName OtherSettingPanel
@@ -51,25 +60,35 @@ public class OtherSettingPanel {
     private void initButton() {
         outputFileBut.addActionListener(e -> {
             String path = showDialog();
-            setOutputFileText(path);
+            if (StringUtils.isNotEmpty(path)) {
+                setOutputFileText(path);
+            }
         });
         templateBut.addActionListener(e -> {
             String path = showDialog();
-            setTemplateText(path);
+            if (StringUtils.isNotEmpty(path)) {
+                setTemplateText(path);
+            }
         });
     }
 
     private String showDialog() {
-        DialogBuilder builder = new DialogBuilder();
-        builder.centerPanel(fileTree.getMain());
-        builder.removeAllActions();
-        builder.addOkAction();
-        builder.addCancelAction();
-        boolean isOk = builder.show() == DialogWrapper.OK_EXIT_CODE;
-        if (isOk) {
-            return fileTree.getPathText().replace('\\', '/');
+        Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+        Project curProject = null;
+        if (openProjects.length > 0) {
+            curProject = openProjects[0];
         }
-        return null;
+        List<String> result = new ArrayList<>();
+        FileChooser.chooseFiles(
+            new FileChooserDescriptor(false, true, false, false, false, false),
+            curProject,
+            null,
+            t -> {
+                for (VirtualFile virtualFile : t) {
+                    result.add(FilePathUtil.formatPath(virtualFile.getPath()));
+                }
+            });
+        return result.get(0);
     }
 
 

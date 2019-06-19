@@ -1,5 +1,7 @@
 package org.r.idea.plugin.generator.api.ui;
 
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.treeStructure.Tree;
@@ -31,7 +33,7 @@ import org.r.idea.plugin.generator.api.ui.component.MyTreeNode;
  * @Author Casper
  * @DATE 2019/6/13 9:32
  **/
-public class FileTreeDialog{
+public class FileTreeDialog {
 
     private JTextField pathText;
     private JPanel main;
@@ -73,7 +75,8 @@ public class FileTreeDialog{
             System.out.println(node.getFilePath() + "  " + node.getTitle());
             myTreeNodes.add(node);
         }
-        myTreeNodes = myTreeNodes.stream().sorted((Comparator.comparing(MyTreeNode::getFilePath))).collect(Collectors.toList());
+        myTreeNodes = myTreeNodes.stream().sorted((Comparator.comparing(MyTreeNode::getFilePath)))
+            .collect(Collectors.toList());
         myTreeNodes.forEach(root::add);
         DefaultTreeModel defaultTreeModel = new DefaultTreeModel(root);
 
@@ -146,7 +149,8 @@ public class FileTreeDialog{
                     MyTreeNode childNode = new MyTreeNode(tmp.getName(), tmp);
                     myTreeNodeList.add(childNode);
                 }
-                myTreeNodeList = myTreeNodeList.stream().sorted((Comparator.comparing(MyTreeNode::getFilePath))).collect(Collectors.toList());
+                myTreeNodeList = myTreeNodeList.stream().sorted((Comparator.comparing(MyTreeNode::getFilePath)))
+                    .collect(Collectors.toList());
                 myTreeNodeList.forEach(node::add);
             }
         }

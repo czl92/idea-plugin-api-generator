@@ -33,16 +33,20 @@ public class SettingPanel {
         interfacePathPanel.setTitle("选择接口文件目录路径");
         tabbedPane1.add("other setting", otherSettingPanel.getMain(null));
         if (state != null) {
-            setSrcFilePathText(state.getSrcFilePaths());
-            setInterfaceFileText(state.getInterfaceFilePaths());
-            setTemplateText(state.getTemplateFilePaths());
-            setOutputFileText(state.getOutputFilePaths());
-            setNonsupportClassText(state.getNonsupportClass());
-            setCollectionClassText(state.getCollectionClass());
-            setBaseClassText(state.getBaseClass());
+            init(state);
         }
 
 
+    }
+
+    public void init(SettingState state) {
+        setSrcFilePathText(state.getSrcFilePaths());
+        setInterfaceFileText(state.getInterfaceFilePaths());
+        setTemplateText(state.getTemplateFilePaths());
+        setOutputFileText(state.getOutputFilePaths());
+        setNonsupportClassText(state.getNonsupportClass());
+        setCollectionClassText(state.getCollectionClass());
+        setBaseClassText(state.getBaseClass());
     }
 
     public String getSrcFilePathText() {
