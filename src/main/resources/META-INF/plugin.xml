@@ -18,16 +18,20 @@
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
     <applicationConfigurable id="api-generator" displayName="api-generator"
-      instance="org.r.idea.plugin.generator.api.config.PluginConfig"/>
-    <applicationService serviceInterface="org.r.idea.plugin.generator.api.service.StorageService"
-      serviceImplementation="org.r.idea.plugin.generator.api.service.impl.StorageServiceImpl"/>
-    <applicationService serviceInterface="org.r.idea.plugin.generator.api.service.ConfigConvertor"
-      serviceImplementation="org.r.idea.plugin.generator.api.service.impl.ConfigConvertorImpl"/>
+      instance="org.r.idea.plugin.generator.gui.config.PluginConfig"/>
+    <applicationService serviceInterface="org.r.idea.plugin.generator.gui.service.StorageService"
+      serviceImplementation="org.r.idea.plugin.generator.gui.service.impl.StorageServiceImpl"/>
+    <applicationService serviceInterface="org.r.idea.plugin.generator.gui.service.ConfigConvertor"
+      serviceImplementation="org.r.idea.plugin.generator.gui.service.impl.ConfigConvertorImpl"/>
   </extensions>
 
   <actions>
-    <action id="Generator.api.generate" class="org.r.idea.plugin.generator.api.actions.Generate" text="Generate api doc"
+    <action id="Generator.api.generate" class="org.r.idea.plugin.generator.gui.actions.Generate" text="Generate api doc"
       description="generate the api doc">
+      <add-to-group group-id="ToolsMenu" anchor="last"/>
+    </action>
+    <action id="Generator.api.TestFindClass" class="org.r.idea.plugin.generator.gui.actions.TestFindClass"
+      text="TestFindClass" description="TestFindClass">
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt G"/>
       <add-to-group group-id="ToolsMenu" anchor="last"/>
     </action>
