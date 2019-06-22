@@ -1,6 +1,7 @@
 package org.r.idea.plugin.generator.core.indicators;
 
 import org.r.idea.plugin.generator.impl.indicators.GenericityIndicatorImpl;
+import org.r.idea.plugin.generator.impl.indicators.InterfaceIndicatorImpl;
 
 /**
  * @ClassName IndicatorFactory
@@ -10,6 +11,7 @@ import org.r.idea.plugin.generator.impl.indicators.GenericityIndicatorImpl;
 public class IndicatorFactory {
 
     private static GenericityIndicator genericityIndicator = new GenericityIndicatorImpl();
+
 
     public static GenericityIndicator getGenericityIndicator() {
         return genericityIndicator;

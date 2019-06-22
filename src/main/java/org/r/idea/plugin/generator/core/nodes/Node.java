@@ -9,9 +9,9 @@ import java.util.List;
  **/
 public class Node {
 
-    private String name;
+    private String name = "";
 
-    private String desc;
+    private String desc = "";
 
     private List<Node> children;
 

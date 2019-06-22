@@ -4,8 +4,8 @@ import com.intellij.psi.PsiClass;
 import java.util.ArrayList;
 import java.util.List;
 import org.r.idea.plugin.generator.core.config.Config;
+import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
 import org.r.idea.plugin.generator.core.nodes.Node;
-import org.r.idea.plugin.generator.core.probe.FileProbe;
 
 /**
  * @ClassName Generator
@@ -22,12 +22,16 @@ public class Generator {
     }
 
     public void doGenerate() {
-        List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass();
+        List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
 
         List<Node> interfaceNode = new ArrayList<>();
         for (PsiClass target : interfaceClass) {
-            Node parse = config.getInterfaceParser().parse(target);
-            interfaceNode.add(parse);
+            try {
+                Node parse = config.getInterfaceParser().parse(target);
+                interfaceNode.add(parse);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         List<String> docList = config.getDocBuilder().buildDoc(interfaceNode);

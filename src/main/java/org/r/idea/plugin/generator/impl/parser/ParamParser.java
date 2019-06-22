@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
+import org.r.idea.plugin.generator.core.nodes.Node;
 import org.r.idea.plugin.generator.impl.Utils;
 import org.r.idea.plugin.generator.impl.nodes.ParamNode;
 import org.springframework.util.CollectionUtils;
@@ -23,14 +25,14 @@ import org.springframework.util.CollectionUtils;
 public class ParamParser {
 
 
-    public List<ParamNode> parse(PsiMethod method) {
+    public List<Node> parse(PsiMethod method) throws ClassNotFoundException {
         PojoParser pojoParser = new PojoParser();
         Map<String, String> param = getParam(method);
         boolean priority = !CollectionUtils.isEmpty(param);
         PsiParameter[] parameters = method.getParameterList().getParameters();
-        List<ParamNode> paramNodeList = new ArrayList<>();
+        List<Node> paramNodeList = new ArrayList<>();
         for (PsiParameter parameter : parameters) {
-            ParamNode paramNode = pojoParser.parse(parameter.getType());
+            ParamNode paramNode = pojoParser.parse(parameter.getType().getCanonicalText());
             paramNode.setName(parameter.getName());
             paramNode.setJson(
                 Utils.isContainAnnotation("org.springframework.web.bind.annotation.RequestBody", parameter.getAnnotations()));

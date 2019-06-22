@@ -3,7 +3,7 @@ package org.r.idea.plugin.generator.gui.ui;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import org.r.idea.plugin.generator.gui.Constants;
+import org.r.idea.plugin.generator.impl.Constants;
 import org.r.idea.plugin.generator.gui.beans.SettingState;
 
 /**

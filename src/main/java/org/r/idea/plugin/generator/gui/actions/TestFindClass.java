@@ -2,14 +2,28 @@ package org.r.idea.plugin.generator.gui.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.local.CoreLocalFileSystem;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
+import gherkin.lexer.No;
+import java.util.ArrayList;
 import java.util.List;
+import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
+import org.r.idea.plugin.generator.core.nodes.Node;
+import org.r.idea.plugin.generator.impl.nodes.InterfaceNode;
 import org.r.idea.plugin.generator.impl.nodes.ParamNode;
+import org.r.idea.plugin.generator.impl.parser.InterfaceParser;
 import org.r.idea.plugin.generator.impl.parser.ParamParser;
+import org.r.idea.plugin.generator.impl.probe.FileProbe;
 
 /**
  * @ClassName TestFindClass
@@ -19,23 +33,26 @@ import org.r.idea.plugin.generator.impl.parser.ParamParser;
 public class TestFindClass extends AnAction {
 
 
-    private String[] arrayTypes = {"[]", "List", "ArrayList"};
-
-
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Project project = e.getProject();
-        assert project != null;
-        PsiClass testController = PsiShortNamesCache.getInstance(project)
-            .getClassesByName("TestController", GlobalSearchScope.allScope(project))[0];
 
-        testController.getAnnotations();
-        PsiMethod[] methods = testController.getMethods();
-        PsiMethod method = methods[0];
+        FileProbe fileProbe = new FileProbe();
+        List<String> paths = new ArrayList<>();
+        paths.add("F:/project/project/api-doc/src/main/java/testfile");
+        List<PsiClass> allInterfaceClass = fileProbe.getAllInterfaceClass(paths);
+        allInterfaceClass.size();
 
-        ParamParser paramParser = new ParamParser();
-        List<ParamNode> parse = paramParser.parse(method);
-        System.out.println(parse);
+        InterfaceParser interfaceParser = new InterfaceParser();
+        List<Node> in = new ArrayList<>();
+        for (PsiClass p : allInterfaceClass) {
+            try {
+                Node parse = interfaceParser.parse(p);
+                in.add(parse);
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+        in.size();
 
     }
 

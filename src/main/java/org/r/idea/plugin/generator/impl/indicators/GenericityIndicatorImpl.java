@@ -2,7 +2,7 @@ package org.r.idea.plugin.generator.impl.indicators;
 
 import java.util.Arrays;
 import java.util.List;
-import org.r.idea.plugin.generator.gui.Constants;
+import org.r.idea.plugin.generator.impl.Constants;
 import org.r.idea.plugin.generator.core.indicators.GenericityIndicator;
 
 /**

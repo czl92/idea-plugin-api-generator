@@ -1,8 +1,9 @@
 package org.r.idea.plugin.generator.core.config;
 
+import java.util.List;
 import org.r.idea.plugin.generator.core.builder.DocBuilder;
 import org.r.idea.plugin.generator.core.parser.Parser;
-import org.r.idea.plugin.generator.core.probe.FileProbe;
+import org.r.idea.plugin.generator.core.probe.Probe;
 
 /**
  * @ClassName Config
@@ -15,8 +16,10 @@ public interface Config {
 
     Parser getInterfaceParser();
 
-    FileProbe getFileProbe();
+    Probe getFileProbe();
 
     DocBuilder getDocBuilder();
+
+    List<String> getInterfaceFilesPath();
 
 }

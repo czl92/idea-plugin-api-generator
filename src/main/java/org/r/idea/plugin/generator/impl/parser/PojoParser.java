@@ -5,11 +5,11 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 import java.util.ArrayList;
 import java.util.List;
-import org.r.idea.plugin.generator.gui.Constants;
+import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
+import org.r.idea.plugin.generator.impl.Constants;
 import org.r.idea.plugin.generator.impl.Utils;
 import org.r.idea.plugin.generator.core.indicators.IndicatorFactory;
 import org.r.idea.plugin.generator.core.nodes.Node;
@@ -23,16 +23,16 @@ import org.r.idea.plugin.generator.impl.nodes.ParamNode;
 public class PojoParser {
 
 
-    public ParamNode parse(PsiType typeElement) {
+    public ParamNode parse(String qualifiedName) throws ClassNotFoundException {
 
         ParamNode paramNode;
 
         List<String> typeParams = new ArrayList<>();
         /*判断是否泛型*/
-        if (!IndicatorFactory.getGenericityIndicator().isGenricityType(typeElement.getCanonicalText(), typeParams)) {
+        if (!IndicatorFactory.getGenericityIndicator().isGenricityType(qualifiedName, typeParams)) {
             /*非泛型*/
-            String type = isArray(typeElement.getCanonicalText());
-            boolean isArray = type.length() < typeElement.getCanonicalText().length();
+            String type = isArray(qualifiedName);
+            boolean isArray = type.length() < qualifiedName.length();
             paramNode = parserPojo(type);
             paramNode.setArray(isArray);
 
@@ -59,7 +59,7 @@ public class PojoParser {
     }
 
 
-    private ParamNode parserPojo(String qualifiedName) {
+    private ParamNode parserPojo(String qualifiedName) throws ClassNotFoundException {
         ParamNode paramNode = new ParamNode();
         /*先判断是否为基本类型*/
         if (Utils.isBaseClass(qualifiedName)) {
@@ -69,13 +69,13 @@ public class PojoParser {
             PsiClass target = JavaPsiFacade.getInstance(defaultProject).findClass(qualifiedName,
                 GlobalSearchScope.allScope(defaultProject));
             if (target == null) {
-                throw new RuntimeException("不存在类：" + qualifiedName);
+                throw new ClassNotFoundException("不存在类：" + qualifiedName);
             }
             paramNode.setJson(true);
             paramNode.setTypeQualifiedName(target.getQualifiedName());
             List<Node> children = new ArrayList<>();
             for (PsiField field : target.getFields()) {
-                ParamNode child = parse(field.getType());
+                ParamNode child = parse(field.getType().getCanonicalText());
                 child.setName(field.getName());
                 if (field.getDocComment() == null) {
                     child.setDesc("");

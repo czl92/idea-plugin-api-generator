@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import org.r.idea.plugin.generator.gui.Constants;
+import org.r.idea.plugin.generator.impl.Constants;
 import org.r.idea.plugin.generator.utils.StringUtils;
 import org.r.idea.plugin.generator.gui.util.FilePathUtil;
 

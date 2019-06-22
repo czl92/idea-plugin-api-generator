@@ -1,6 +1,7 @@
 package org.r.idea.plugin.generator.core.parser;
 
 import com.intellij.psi.PsiClass;
+import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
 import org.r.idea.plugin.generator.core.nodes.Node;
 
 /**
@@ -12,6 +13,6 @@ import org.r.idea.plugin.generator.core.nodes.Node;
 public interface Parser {
 
 
-    public Node parse(PsiClass target);
+    Node parse(PsiClass target) throws ClassNotFoundException;
 
 }

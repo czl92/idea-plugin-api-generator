@@ -4,14 +4,14 @@ import com.intellij.psi.PsiClass;
 import java.util.List;
 
 /**
- * @ClassName FileProbe
+ * @ClassName Probe
  * @Author Casper
  * @DATE 2019/6/21 16:54
  **/
 
-public interface FileProbe {
+public interface Probe {
 
-    List<PsiClass> getAllInterfaceClass();
+    List<PsiClass> getAllInterfaceClass(List<String> interfaceFilePath);
 
     void saveDoc(List<String> docList);
 
