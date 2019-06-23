@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.4.9'
 }
-def ideaVersion = '2019.1.2'
+def ideaVersion = '2019.1'
 def pluginGroup = 'org.r.idea.plugin'
 def pluginVersion = '1.3' + "-" + ideaVersion
 
@@ -15,12 +15,17 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     mavenLocal()
-    maven { url "file://F:/maven/repository" }
+    maven { url "file://D:/maven/repository" }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.r.generator.api', name: 'core', version: '1.1'
+    compile group: 'org.r.generator.api', name: 'core', version: '1.0'
+    compile group: 'org.springframework.boot',name: 'spring-boot-starter-web',version: '2.1.6.RELEASE'
+    compile group: 'com.github.xiaoymin',name: 'swagger-bootstrap-ui',version: '1.9.4'
+    compile group: 'io.springfox',name: 'springfox-swagger2',version: '2.9.2'
+    compile group: 'com.alibaba',name: 'fastjson',version: '1.2.54'
+    compile group: 'com.sun',name: 'tools',version: '1.0'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
