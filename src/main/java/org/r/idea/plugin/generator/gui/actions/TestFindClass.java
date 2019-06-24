@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.r.idea.plugin.generator.core.ConfigHolder;
+import org.r.idea.plugin.generator.core.Generator;
 import org.r.idea.plugin.generator.core.beans.FileBO;
 import org.r.idea.plugin.generator.core.config.Config;
 import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
@@ -49,42 +50,10 @@ public class TestFindClass extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent event) {
 
-//        FileProbe fileProbe = new FileProbe();
-//        List<String> paths = new ArrayList<>();
-//        paths.add("F:/project/project/api-doc/src/main/java/testfile");
-//        List<PsiClass> allInterfaceClass = fileProbe.getAllInterfaceClass(paths);
-//        allInterfaceClass.size();
-//
-//        InterfaceParser interfaceParser = new InterfaceParser();
-//        List<Node> in = new ArrayList<>();
-//        for (PsiClass p : allInterfaceClass) {
-//            try {
-//                Node parse = interfaceParser.parse(p);
-//                in.add(parse);
-//            } catch (ClassNotFoundException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//        in.size();
-
         Config config = getConfig();
         ConfigHolder.setConfig(config);
-        List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
-
-        List<Node> interfaceNode = new ArrayList<>();
-        for (PsiClass target : interfaceClass) {
-            try {
-                Node parse = config.getInterfaceParser().parse(target);
-                interfaceNode.add(parse);
-            } catch (ClassNotFoundException e1) {
-                e1.printStackTrace();
-            }
-        }
-        List<FileBO> docList = config.getDocBuilder().buildDoc(interfaceNode);
-
-        String srcDir = config.getFileProbe().saveDoc(docList, config.getWorkSpace());
-
-        config.getJarBuilder().buildJar(srcDir, config.getWorkSpace());
+        Generator generator = new Generator(config);
+        generator.doGenerate();
 
         Messages.showInfoMessage("完成", "提示");
     }

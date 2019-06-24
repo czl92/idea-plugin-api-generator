@@ -59,43 +59,26 @@ public class JarBuilderImpl implements JarBuilder {
             return;
         }
         /*复制编译环境*/
-        copyDependences(workSpace);
+        copyJar(dependenciesJar, workSpace + copyOfDependenciesJar);
         /*复制容器*/
-        copyContainer(workSpace);
+        copyJar(contarinerJar, workSpace + copyOfContarinerJar);
         /*编译源文件,并储存为临时文件*/
         List<File> clazz = compile(srcJava, workSpace);
         /*copy容器*/
         generateContainer(clazz, workSpace);
 
 
-
-
     }
 
-    /**
-     * 复制编译依赖到工作空间中
-     */
-    private void copyDependences(String workSpace) {
-        File dependence = new File(workSpace + copyOfDependenciesJar);
-
-        try (
-            InputStream in = this.getClass().getResourceAsStream(dependenciesJar);
-            OutputStream out = new FileOutputStream(dependence);
-        ) {
-            FileUtils.copy(out, in);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void copyJar(String src, String target) {
+        File dependence = new File(target);
+        if (!dependence.getParentFile().exists()) {
+            if (!dependence.getParentFile().mkdirs()) {
+                throw new RuntimeException("无法创建路径：" + dependence.getAbsolutePath());
+            }
         }
-    }
-
-    /**
-     * 复制容器到工作空间中
-     */
-    private void copyContainer(String workSpace) {
-        File dependence = new File(workSpace + copyOfContarinerJar);
-
         try (
-            InputStream in = this.getClass().getResourceAsStream(contarinerJar);
+            InputStream in = this.getClass().getResourceAsStream(src);
             OutputStream out = new FileOutputStream(dependence)
         ) {
             FileUtils.copy(out, in);
@@ -103,6 +86,7 @@ public class JarBuilderImpl implements JarBuilder {
             e.printStackTrace();
         }
     }
+
 
     /**
      * 编译源文件并输入到指定的临时目录

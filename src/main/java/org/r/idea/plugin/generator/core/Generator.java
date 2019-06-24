@@ -24,23 +24,23 @@ public class Generator {
     }
 
     public void doGenerate() {
-        //List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
-        //
-        //List<Node> interfaceNode = new ArrayList<>();
-        //for (PsiClass target : interfaceClass) {
-        //    try {
-        //        Node parse = config.getInterfaceParser().parse(target);
-        //        interfaceNode.add(parse);
-        //    } catch (ClassNotFoundException e) {
-        //        e.printStackTrace();
-        //    }
-        //}
-        //
-        //List<FileBO> docList = config.getDocBuilder().buildDoc(interfaceNode);
-        //
-        //String srcDir = config.getFileProbe().saveDoc(docList, config.getWorkSpace());
-        //
-        //config.getJarBuilder().buildJar(srcDir, config.getWorkSpace());
+        List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
+
+        List<Node> interfaceNode = new ArrayList<>();
+        for (PsiClass target : interfaceClass) {
+            try {
+                Node parse = config.getInterfaceParser().parse(target);
+                interfaceNode.add(parse);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<FileBO> docList = config.getDocBuilder().buildDoc(interfaceNode);
+
+        String srcDir = config.getFileProbe().saveDoc(docList, config.getWorkSpace());
+
+        config.getJarBuilder().buildJar(srcDir, config.getWorkSpace());
 
     }
 
