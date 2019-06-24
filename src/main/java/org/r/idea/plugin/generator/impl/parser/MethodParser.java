@@ -32,6 +32,8 @@ public class MethodParser {
         if (target.getDocComment() != null) {
             methodNode.setDesc(Utils.getDocCommentDesc(target.getDocComment().getDescriptionElements()));
         }
+        /*设置方法名*/
+        methodNode.setName(target.getName());
         /*处理参数和返回值*/
         processParameterAndRespone(methodNode, target);
         return methodNode;

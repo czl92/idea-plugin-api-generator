@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.r.idea.plugin.generator.core.ConfigHolder;
 import org.r.idea.plugin.generator.core.beans.FileBO;
 import org.r.idea.plugin.generator.core.config.Config;
 import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
@@ -67,6 +68,7 @@ public class TestFindClass extends AnAction {
 //        in.size();
 
         Config config = getConfig();
+        ConfigHolder.setConfig(config);
         List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
 
         List<Node> interfaceNode = new ArrayList<>();
@@ -82,19 +84,18 @@ public class TestFindClass extends AnAction {
 
         String srcDir = config.getFileProbe().saveDoc(docList, config.getWorkSpace());
 
-
-
+        config.getJarBuilder().buildJar(srcDir, config.getWorkSpace());
 
 
     }
 
-    private Config getConfig(){
+    private Config getConfig() {
         List<String> interfacePaths = new ArrayList<>();
         interfacePaths.add("F:/project/project/api-doc/src/main/java/testfile/controller");
-        String workSpace = "F:/project/project/api-doc/src/main/java/org/r/api/browser/controller/";
+        //String workSpace = "F:/project/project/api-doc/src/main/java/org/r/api/browser/controller/";
+        String workSpace = "D:/Users/workspace/";
 
-
-        Config config = new ConfigImpl(interfacePaths,workSpace);
+        Config config = new ConfigImpl(interfacePaths, workSpace);
         return config;
     }
 

@@ -63,11 +63,21 @@ public class JarBuilderImpl implements JarBuilder {
      */
     private List<File> compile(List<String> javaSrc, String workSpace) {
 
-        /*构建编译参数*/
-        int ext = 4;
-        String[] filenames = new String[javaSrc.size() + ext];
         String classOutputPath = workSpace + Constants.TMP_CLASS_DIR;
+        /*判读目录是否存在*/
+        File clazzsDir = new File(classOutputPath);
+        if (!clazzsDir.exists()) {
+            if (!clazzsDir.mkdirs()) {
+                throw new RuntimeException("无法创建目录：" + classOutputPath);
+            }
+        }
+        /*构建编译参数*/
+        int ext = 6;
+        String[] filenames = new String[javaSrc.size() + ext];
         int i = 0;
+
+        filenames[i++] ="-classpath";
+        filenames[i++] = "F:/project/project/api-generator/build/idea-sandbox/plugins/gui-generator/lib/";
         filenames[i++] = "-d";
         filenames[i++] = classOutputPath;
         filenames[i++] = "-encoding";

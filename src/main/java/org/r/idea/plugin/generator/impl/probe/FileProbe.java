@@ -97,7 +97,7 @@ public class FileProbe implements Probe {
             }
             for (File file : files) {
                 List<File> fileList = searchFile(file.getAbsolutePath(), fileFilter);
-                if (CollectionUtils.isEmpty(fileList)) {
+                if (CollectionUtils.isNotEmpty(fileList)) {
                     result.addAll(fileList);
                 }
             }

@@ -31,7 +31,7 @@ public enum RequestMethodEnum {
     /**
      * RequestMapping
      */
-    ALL("POST/GET", "org.springframework.web.bind.annotation.RequestMapping");
+    ALL("POST", "org.springframework.web.bind.annotation.RequestMapping");
 
     /**
      * 请求方法值

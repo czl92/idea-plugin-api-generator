@@ -16,7 +16,7 @@ public class ConfigHolder {
         return config;
     }
 
-    public static void setConfig(Config config) {
-        config = config;
+    public static void setConfig(Config cur) {
+        config = cur;
     }
 }
