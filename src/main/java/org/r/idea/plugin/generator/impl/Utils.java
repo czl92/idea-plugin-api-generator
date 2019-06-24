@@ -13,7 +13,7 @@ import com.intellij.psi.javadoc.PsiDocToken;
 public class Utils {
 
 
-    private static String[] baseClass = {"String", "Long", "int", "long", "char", "Integer", "double", "Double",
+    public static String[] baseClass = {"String", "Long", "int", "long", "char", "Integer", "double", "Double",
         "BigDecimal"};
 
 

@@ -50,22 +50,9 @@ public class TestFindClass extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent event) {
 
-        Config config = getConfig();
-        ConfigHolder.setConfig(config);
-        Generator generator = new Generator(config);
-        generator.doGenerate();
 
         Messages.showInfoMessage("完成", "提示");
     }
 
-    private Config getConfig() {
-        List<String> interfacePaths = new ArrayList<>();
-        interfacePaths.add("F:/project/project/api-doc/src/main/java/testfile/controller");
-        //String workSpace = "F:/project/project/api-doc/src/main/java/org/r/api/browser/controller/";
-        String workSpace = "D:/Users/wk/";
-
-        Config config = new ConfigImpl(interfacePaths, workSpace);
-        return config;
-    }
 
 }

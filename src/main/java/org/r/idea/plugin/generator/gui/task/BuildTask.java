@@ -9,16 +9,22 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.awt.RelativePoint;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nls.Capitalization;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.r.generator.api.core.Generator;
 import org.r.generator.api.core.beans.ConfigBean;
+import org.r.idea.plugin.generator.core.Generator;
+import org.r.idea.plugin.generator.core.config.Config;
 import org.r.idea.plugin.generator.gui.beans.SettingState;
 import org.r.idea.plugin.generator.gui.service.StorageService;
+import org.r.idea.plugin.generator.impl.Constants;
+import org.r.idea.plugin.generator.impl.config.ConfigImpl;
 
 /**
  * @ClassName BuildTask
@@ -32,7 +38,7 @@ public class BuildTask extends Task.Backgroundable {
 
 
     public BuildTask(@Nullable Project project,
-        @Nls(capitalization = Capitalization.Title) @NotNull String title) {
+                     @Nls(capitalization = Capitalization.Title) @NotNull String title) {
         super(project, title);
         this.project = project;
         this.title = title;
@@ -48,37 +54,30 @@ public class BuildTask extends Task.Backgroundable {
             throw new RuntimeException("程序异常");
         }
         indicator.setFraction(0.1);
-        ConfigBean configBean = getConfig(state);
+        Config config = getConfig(state);
         indicator.setFraction(0.3);
-        Generator generator = new Generator();
-        generator.generate(configBean);
+        Generator generator = new Generator(config);
+        generator.doGenerate();
         indicator.setFraction(1.0);
         indicator.setText("finish");
 
         StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
         JBPopupFactory.getInstance()
-            .createHtmlTextBalloonBuilder("building finish", MessageType.INFO, null)
-            .setFadeoutTime(7500)
-            .createBalloon()
-            .show(RelativePoint.getCenterOf(statusBar.getComponent()), Position.atRight);
+                .createHtmlTextBalloonBuilder("building finish", MessageType.INFO, null)
+                .setFadeoutTime(7500)
+                .createBalloon()
+                .show(RelativePoint.getCenterOf(statusBar.getComponent()), Position.atRight);
 
     }
 
-    private ConfigBean getConfig(SettingState state) {
-        String splitChar = ",";
-        if (state == null || project == null) {
-            throw new RuntimeException("程序异常");
-        }
-        ConfigBean configBean = new ConfigBean();
-        configBean.setProjectPath(project.getBasePath());
-        configBean.setSrcFilePath(new ArrayList<>(Arrays.asList(state.getSrcFilePaths().split(splitChar))));
-        configBean.setInterfacePath(new ArrayList<>(Arrays.asList(state.getInterfaceFilePaths().split(splitChar))));
-        configBean.setCodeTemplatePath(state.getTemplateFilePaths());
-        configBean.setDocPath(state.getOutputFilePaths());
-        configBean.setBaseClassType(state.getBaseClass().split(splitChar));
-        configBean.setCollectionClassType(state.getCollectionClass().split(splitChar));
-        configBean.setNonsupportCollectionClassType(state.getNonsupportClass().split(splitChar));
-        return configBean;
+    private Config getConfig(SettingState state) {
+
+        List<String> interfacePath = new ArrayList<>(Arrays.asList(state.getInterfaceFilePaths().split(Constants.SPLITOR)));
+
+        Config config = new ConfigImpl(interfacePath, state.getOutputFilePaths(), state.getBaseClass());
+
+
+        return config;
     }
 
 
