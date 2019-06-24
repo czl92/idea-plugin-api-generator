@@ -40,7 +40,7 @@ public interface Constants {
     /**
      * 文件在jar包中的位置
      */
-    String JAR_FILE_PATH = "BOOT-INF/classes/org/r/api/container/swagger2/";
+    String JAR_FILE_PATH = "BOOT-INF/classes/org/r/api/container/swagger2/controller/";
 
 
 }

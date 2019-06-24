@@ -5,11 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
+import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.stream.Collectors;
 import javax.tools.JavaCompiler;
@@ -31,6 +33,14 @@ public class JarBuilderImpl implements JarBuilder {
      */
     private String contarinerJar = "/container.jar";
 
+    private String copyOfContarinerJar = "lib/container.jar";
+    /**
+     * 依赖jar在本jar包中的位置
+     */
+    private String dependenciesJar = "/dependencies.jar";
+
+    private String copyOfDependenciesJar = "lib/dependencies.jar";
+
     /**
      * 目标可运行jar包
      */
@@ -48,11 +58,50 @@ public class JarBuilderImpl implements JarBuilder {
             System.out.println("源文件不存在");
             return;
         }
+        /*复制编译环境*/
+        copyDependences(workSpace);
+        /*复制容器*/
+        copyContainer(workSpace);
         /*编译源文件,并储存为临时文件*/
         List<File> clazz = compile(srcJava, workSpace);
         /*copy容器*/
         generateContainer(clazz, workSpace);
 
+
+
+
+    }
+
+    /**
+     * 复制编译依赖到工作空间中
+     */
+    private void copyDependences(String workSpace) {
+        File dependence = new File(workSpace + copyOfDependenciesJar);
+
+        try (
+            InputStream in = this.getClass().getResourceAsStream(dependenciesJar);
+            OutputStream out = new FileOutputStream(dependence);
+        ) {
+            FileUtils.copy(out, in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 复制容器到工作空间中
+     */
+    private void copyContainer(String workSpace) {
+        File dependence = new File(workSpace + copyOfContarinerJar);
+
+        try (
+            InputStream in = this.getClass().getResourceAsStream(contarinerJar);
+            OutputStream out = new FileOutputStream(dependence)
+        ) {
+            FileUtils.copy(out, in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -76,8 +125,8 @@ public class JarBuilderImpl implements JarBuilder {
         String[] filenames = new String[javaSrc.size() + ext];
         int i = 0;
 
-        filenames[i++] ="-classpath";
-        filenames[i++] = "F:/project/project/api-generator/build/idea-sandbox/plugins/gui-generator/lib/";
+        filenames[i++] = "-classpath";
+        filenames[i++] = workSpace + copyOfDependenciesJar;
         filenames[i++] = "-d";
         filenames[i++] = classOutputPath;
         filenames[i++] = "-encoding";
@@ -118,19 +167,24 @@ public class JarBuilderImpl implements JarBuilder {
     }
 
 
+    /**
+     * 生产容器
+     */
     private void generateContainer(List<File> clazzs, String workSpace) {
         /*获取容器*/
         File targetJar = new File(workSpace + productJar);
         InputStream in = null;
         try (
             JarOutputStream out = new JarOutputStream(new FileOutputStream(targetJar));
-            JarInputStream jarInput = new JarInputStream(this.getClass().getResourceAsStream(contarinerJar));
         ) {
-            JarEntry tmpEntry = null;
-            while ((tmpEntry = jarInput.getNextJarEntry()) != null) {
-                out.putNextEntry(tmpEntry);
-                FileUtils.copy(out, jarInput);
+            JarFile container = new JarFile(workSpace + copyOfContarinerJar);
+            Enumeration<JarEntry> entries = container.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                out.putNextEntry(entry);
+                FileUtils.copy(out, container.getInputStream(entry));
             }
+            container.close();
             for (File file : clazzs) {
                 JarEntry entry = new JarEntry(Constants.JAR_FILE_PATH + file.getName());
                 out.putNextEntry(entry);
@@ -138,6 +192,8 @@ public class JarBuilderImpl implements JarBuilder {
                 FileUtils.copy(out, in);
                 in.close();
             }
+            out.finish();
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

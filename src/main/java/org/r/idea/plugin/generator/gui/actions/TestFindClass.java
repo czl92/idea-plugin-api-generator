@@ -86,14 +86,14 @@ public class TestFindClass extends AnAction {
 
         config.getJarBuilder().buildJar(srcDir, config.getWorkSpace());
 
-
+        Messages.showInfoMessage("完成", "提示");
     }
 
     private Config getConfig() {
         List<String> interfacePaths = new ArrayList<>();
         interfacePaths.add("F:/project/project/api-doc/src/main/java/testfile/controller");
         //String workSpace = "F:/project/project/api-doc/src/main/java/org/r/api/browser/controller/";
-        String workSpace = "D:/Users/workspace/";
+        String workSpace = "D:/Users/wk/";
 
         Config config = new ConfigImpl(interfacePaths, workSpace);
         return config;
