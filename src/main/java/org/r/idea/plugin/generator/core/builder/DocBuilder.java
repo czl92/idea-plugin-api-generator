@@ -1,6 +1,7 @@
 package org.r.idea.plugin.generator.core.builder;
 
 import java.util.List;
+import org.r.idea.plugin.generator.core.beans.FileBO;
 import org.r.idea.plugin.generator.core.nodes.Node;
 
 /**
@@ -12,8 +13,8 @@ import org.r.idea.plugin.generator.core.nodes.Node;
 public interface DocBuilder {
 
 
-    String buildDoc(Node node);
+    FileBO buildDoc(Node node);
 
-    List<String> buildDoc(List<Node> nodes);
+    List<FileBO> buildDoc(List<Node> nodes);
 
 }

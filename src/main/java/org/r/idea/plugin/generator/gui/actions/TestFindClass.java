@@ -23,7 +23,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.r.idea.plugin.generator.core.beans.FileBO;
+import org.r.idea.plugin.generator.core.config.Config;
+import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
 import org.r.idea.plugin.generator.core.nodes.Node;
+import org.r.idea.plugin.generator.impl.config.ConfigImpl;
 import org.r.idea.plugin.generator.impl.nodes.InterfaceNode;
 import org.r.idea.plugin.generator.impl.nodes.ParamNode;
 import org.r.idea.plugin.generator.impl.parser.InterfaceParser;
@@ -42,7 +46,7 @@ public class TestFindClass extends AnAction {
 
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(AnActionEvent event) {
 
 //        FileProbe fileProbe = new FileProbe();
 //        List<String> paths = new ArrayList<>();
@@ -62,20 +66,36 @@ public class TestFindClass extends AnAction {
 //        }
 //        in.size();
 
+        Config config = getConfig();
+        List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
 
-        URL resource = this.getClass().getResource("/container.jar");
-        JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-        try {
-            Class<?> aClass = Class.forName("com.sun.tools.javac.api.JavacTool");
-            Method create = aClass.getMethod("create");
-            javaCompiler = (JavaCompiler) create.invoke(null);
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e1) {
-            e1.printStackTrace();
+        List<Node> interfaceNode = new ArrayList<>();
+        for (PsiClass target : interfaceClass) {
+            try {
+                Node parse = config.getInterfaceParser().parse(target);
+                interfaceNode.add(parse);
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
         }
-        if(javaCompiler == null){
-            Messages.showInfoMessage("找不到编译器","提示");
-        }
+        List<FileBO> docList = config.getDocBuilder().buildDoc(interfaceNode);
+
+        String srcDir = config.getFileProbe().saveDoc(docList, config.getWorkSpace());
+
+
+
+
+
     }
 
+    private Config getConfig(){
+        List<String> interfacePaths = new ArrayList<>();
+        interfacePaths.add("F:/project/project/api-doc/src/main/java/testfile/controller");
+        String workSpace = "F:/project/project/api-doc/src/main/java/org/r/api/browser/controller/";
+
+
+        Config config = new ConfigImpl(interfacePaths,workSpace);
+        return config;
+    }
 
 }

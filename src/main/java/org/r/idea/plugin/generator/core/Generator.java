@@ -3,6 +3,7 @@ package org.r.idea.plugin.generator.core;
 import com.intellij.psi.PsiClass;
 import java.util.ArrayList;
 import java.util.List;
+import org.r.idea.plugin.generator.core.beans.FileBO;
 import org.r.idea.plugin.generator.core.config.Config;
 import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
 import org.r.idea.plugin.generator.core.nodes.Node;
@@ -19,25 +20,27 @@ public class Generator {
 
     public Generator(Config config) {
         this.config = config;
+        ConfigHolder.setConfig(config);
     }
 
     public void doGenerate() {
-        List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
-
-        List<Node> interfaceNode = new ArrayList<>();
-        for (PsiClass target : interfaceClass) {
-            try {
-                Node parse = config.getInterfaceParser().parse(target);
-                interfaceNode.add(parse);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        List<String> docList = config.getDocBuilder().buildDoc(interfaceNode);
-
-        config.getFileProbe().saveDoc(docList);
-
+        //List<PsiClass> interfaceClass = config.getFileProbe().getAllInterfaceClass(config.getInterfaceFilesPath());
+        //
+        //List<Node> interfaceNode = new ArrayList<>();
+        //for (PsiClass target : interfaceClass) {
+        //    try {
+        //        Node parse = config.getInterfaceParser().parse(target);
+        //        interfaceNode.add(parse);
+        //    } catch (ClassNotFoundException e) {
+        //        e.printStackTrace();
+        //    }
+        //}
+        //
+        //List<FileBO> docList = config.getDocBuilder().buildDoc(interfaceNode);
+        //
+        //String srcDir = config.getFileProbe().saveDoc(docList, config.getWorkSpace());
+        //
+        //config.getJarBuilder().buildJar(srcDir, config.getWorkSpace());
 
     }
 

@@ -28,6 +28,19 @@ public interface Constants {
      */
     String DOCCOMMENT_RETURN = "return";
 
+    /**
+     * 临时的java文件目录
+     */
+    String TMP_JAVA_DIR = "java/";
+    /**
+     * 临时的class文件目录
+     */
+    String TMP_CLASS_DIR = "class/";
+
+    /**
+     * 文件在jar包中的位置
+     */
+    String JAR_FILE_PATH = "BOOT-INF/classes/org/r/api/container/swagger2/";
 
 
 }

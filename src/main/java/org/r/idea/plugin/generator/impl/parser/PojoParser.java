@@ -44,6 +44,7 @@ public class PojoParser {
         } else {
             /*其他高元泛型不支持默认为object*/
             paramNode = new ParamNode();
+
             paramNode.setTypeQualifiedName("java.lang.Object");
         }
 
@@ -72,6 +73,7 @@ public class PojoParser {
                 throw new ClassNotFoundException("不存在类：" + qualifiedName);
             }
             paramNode.setJson(true);
+            paramNode.setEntity(true);
             paramNode.setTypeQualifiedName(target.getQualifiedName());
             List<Node> children = new ArrayList<>();
             for (PsiField field : target.getFields()) {

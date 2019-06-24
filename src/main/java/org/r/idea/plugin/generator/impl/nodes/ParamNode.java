@@ -9,18 +9,54 @@ import org.r.idea.plugin.generator.core.nodes.Node;
  **/
 public class ParamNode extends Node {
 
+    /**
+     * 类型简称
+     */
     private String typeShortName;
 
+    /**
+     * 类型全称
+     */
     private String typeQualifiedName;
 
-
+    /**
+     * 是否实体
+     */
+    private boolean isEntity;
+    /**
+     * 请求时是否为json格式
+     */
     private boolean isJson;
 
+    /**
+     * 请求时是否为数组
+     */
     private boolean isArray;
 
+    /**
+     * 是否泛型
+     */
     private boolean isGenericity;
+    /**
+     * 是否必传
+     */
+    private boolean isRequired;
 
+    public boolean isRequired() {
+        return isRequired;
+    }
 
+    public void setRequired(boolean required) {
+        isRequired = required;
+    }
+
+    public boolean isEntity() {
+        return isEntity;
+    }
+
+    public void setEntity(boolean entity) {
+        isEntity = entity;
+    }
 
     public boolean isGenericity() {
         return isGenericity;

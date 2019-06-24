@@ -9,10 +9,19 @@ import java.util.List;
  **/
 public class Node {
 
+    /**
+     * 名称
+     */
     private String name = "";
 
+    /**
+     * 描述
+     */
     private String desc = "";
 
+    /**
+     * 子节点
+     */
     private List<Node> children;
 
     public String getDesc() {

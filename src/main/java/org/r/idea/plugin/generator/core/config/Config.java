@@ -2,6 +2,7 @@ package org.r.idea.plugin.generator.core.config;
 
 import java.util.List;
 import org.r.idea.plugin.generator.core.builder.DocBuilder;
+import org.r.idea.plugin.generator.core.builder.JarBuilder;
 import org.r.idea.plugin.generator.core.parser.Parser;
 import org.r.idea.plugin.generator.core.probe.Probe;
 
@@ -20,6 +21,10 @@ public interface Config {
 
     DocBuilder getDocBuilder();
 
+    JarBuilder getJarBuilder();
+
     List<String> getInterfaceFilesPath();
+
+    String getWorkSpace();
 
 }
