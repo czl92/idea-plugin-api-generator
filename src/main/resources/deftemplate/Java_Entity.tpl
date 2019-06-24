@@ -1,4 +1,4 @@
-package org.r.api.browser.controller;
+package org.r.api.container.swagger2.controller;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModelProperty;

@@ -1,4 +1,4 @@
-package org.r.api.browser.controller;
+package org.r.api.container.swagger2.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
