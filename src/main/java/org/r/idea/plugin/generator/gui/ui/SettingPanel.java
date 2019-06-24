@@ -1,10 +1,22 @@
 package org.r.idea.plugin.generator.gui.ui;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import org.r.idea.plugin.generator.gui.util.FilePathUtil;
 import org.r.idea.plugin.generator.impl.Constants;
 import org.r.idea.plugin.generator.gui.beans.SettingState;
+import org.r.idea.plugin.generator.utils.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * @ClassName SettingPanel
@@ -13,107 +25,147 @@ import org.r.idea.plugin.generator.gui.beans.SettingState;
  **/
 public class SettingPanel {
 
-    private JTabbedPane tabbedPane1;
     private JPanel main;
-    private TablePathPanel srcPathPanel = new TablePathPanel();
-    private TablePathPanel interfacePathPanel = new TablePathPanel();
-    private OtherSettingPanel otherSettingPanel = new OtherSettingPanel();
+    private JButton add;
+    private JButton del;
+    private JTable pathTable;
+    private JTextField workSpace;
+    private JButton wsBut;
+    private JTextField baseClass;
 
     public JComponent getPanel(SettingState state) {
 
-        createUIComponents(state);
+        workSpace.setEnabled(false);
+        initTable();
+        initButton();
+        if (state != null) {
+            init(state);
+        }
         return main;
     }
 
 
-    private void createUIComponents(SettingState state) {
-        tabbedPane1.add("src file path", srcPathPanel.getMain());
-        srcPathPanel.setTitle("选择源代码目录路径");
-        tabbedPane1.add("interface file path", interfacePathPanel.getMain());
-        interfacePathPanel.setTitle("选择接口文件目录路径");
-        tabbedPane1.add("other setting", otherSettingPanel.getMain(null));
-        if (state != null) {
-            init(state);
-        }
+    public void initTable() {
+        DefaultTableModel model = (DefaultTableModel) pathTable.getModel();
+        Vector<String> header = new Vector<>();
+        header.add("路径");
+        model.setColumnIdentifiers(header);
+        pathTable.setModel(model);
+    }
 
+    public void initButton() {
+        add.addActionListener(e -> {
+            List<String> paths = selectPaths();
+            setPath(paths);
+        });
+        del.addActionListener(e -> {
+            DefaultTableModel tmp = (DefaultTableModel) pathTable.getModel();
+            int[] selectedRows = pathTable.getSelectedRows();
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                tmp.removeRow(selectedRows[i]);
+            }
+            pathTable.setModel(tmp);
+        });
 
+        wsBut.addActionListener(e -> {
+            List<String> paths = selectPaths();
+            String path = paths.get(0);
+            if (StringUtils.isNotEmpty(path)) {
+                setOutputFileText(path);
+            }
+        });
     }
 
     public void init(SettingState state) {
-        setSrcFilePathText(state.getSrcFilePaths());
         setInterfaceFileText(state.getInterfaceFilePaths());
-        setTemplateText(state.getTemplateFilePaths());
         setOutputFileText(state.getOutputFilePaths());
-        setNonsupportClassText(state.getNonsupportClass());
-        setCollectionClassText(state.getCollectionClass());
         setBaseClassText(state.getBaseClass());
     }
 
-    public String getSrcFilePathText() {
-        return srcPathPanel.getPath();
+
+    private List<String> selectPaths() {
+        Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+        Project curProject = null;
+        if (openProjects.length > 0) {
+            curProject = openProjects[0];
+        }
+        List<String> result = new ArrayList<>();
+        FileChooser.chooseFiles(
+                new FileChooserDescriptor(false, true, false, false, false, true),
+                curProject,
+                null,
+                t -> {
+                    for (int i = 0; i < t.size(); i++) {
+                        result.add(FilePathUtil.formatPath(t.get(i).getPath()));
+                    }
+                });
+        return result;
     }
 
-    public void setSrcFilePathText(String srcFilePathText) {
-        if (isNotVaildPath(srcFilePathText)) {
+
+    public void setPath(List<String> srcPath) {
+        if (srcPath == null) {
             return;
         }
-        srcPathPanel.setPath(srcFilePathText.split(Constants.SPLITOR));
+        /*获取现有的路径*/
+        String path = getPath();
+        /*如果现有的路径存在，则先过滤重复的*/
+        if (StringUtils.isNotEmpty(path)) {
+            List<String> tmp = new ArrayList<>(Arrays.asList(path.split(Constants.SPLITOR)));
+            srcPath.removeAll(tmp);
+        }
+        DefaultTableModel model = (DefaultTableModel) pathTable.getModel();
+        for (String s : srcPath) {
+            Vector<String> tmp = new Vector<>();
+            tmp.add(s);
+            model.addRow(tmp);
+        }
+        pathTable.setModel(model);
     }
 
+    public String getPath() {
+        TableModel model = pathTable.getModel();
+        int rowCount = model.getRowCount();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < rowCount; i++) {
+            sb.append(model.getValueAt(i, 0)).append(",");
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+
     public String getInterfaceFileText() {
-        return interfacePathPanel.getPath();
+        return getPath();
     }
 
     public void setInterfaceFileText(String interfaceFileText) {
         if (isNotVaildPath(interfaceFileText)) {
             return;
         }
-        interfacePathPanel.setPath(interfaceFileText.split(Constants.SPLITOR));
+        setPath(new ArrayList<>(Arrays.asList(interfaceFileText.split(Constants.SPLITOR))));
     }
 
     public String getOutputFileText() {
-        return otherSettingPanel.getOutputFileText();
+        return workSpace.getText();
     }
 
     public void setOutputFileText(String text) {
-        otherSettingPanel.setOutputFileText(text);
+        workSpace.setText(text);
     }
 
     public String getBaseClassText() {
-        return otherSettingPanel.getBaseClassText();
+        return baseClass.getText();
     }
 
     public void setBaseClassText(String text) {
-        otherSettingPanel.setBaseClassText(text);
+        baseClass.setText(text);
     }
-
-    public String getCollectionClassText() {
-        return otherSettingPanel.getCollectionClassText();
-    }
-
-    public void setCollectionClassText(String text) {
-        otherSettingPanel.setCollectionClassText(text);
-    }
-
-    public String getNonsupportClassText() {
-        return otherSettingPanel.getNonsupportClassText();
-    }
-
-    public void setNonsupportClassText(String text) {
-        otherSettingPanel.setNonsupportClassText(text);
-    }
-
-    public String getTemplateText() {
-        return otherSettingPanel.getTemplateText();
-    }
-
-    public void setTemplateText(String text) {
-        otherSettingPanel.setTemplateText(text);
-    }
-
 
     private boolean isNotVaildPath(String path) {
-        return path == null || "".equals(path);
+        return StringUtils.isEmpty(path);
     }
 
 

@@ -77,9 +77,6 @@ public class PluginConfig implements SearchableConfigurable {
     public boolean isModified() {
         SettingState state = storageService.getState();
         if (state != null && settingPanel != null) {
-            if (!state.getSrcFilePaths().equals(settingPanel.getSrcFilePathText())) {
-                return true;
-            }
             if (!state.getInterfaceFilePaths().equals(settingPanel.getInterfaceFileText())) {
                 return true;
             }
@@ -87,15 +84,6 @@ public class PluginConfig implements SearchableConfigurable {
                 return true;
             }
             if (!state.getBaseClass().equals(settingPanel.getBaseClassText())) {
-                return true;
-            }
-            if (!state.getCollectionClass().equals(settingPanel.getCollectionClassText())) {
-                return true;
-            }
-            if (!state.getTemplateFilePaths().equals(settingPanel.getTemplateText())) {
-                return true;
-            }
-            if (!state.getNonsupportClass().equals(settingPanel.getNonsupportClassText())) {
                 return true;
             }
             return false;
@@ -112,13 +100,9 @@ public class PluginConfig implements SearchableConfigurable {
     @Override
     public void apply() throws ConfigurationException {
         SettingState state = new SettingState();
-        state.setSrcFilePaths(settingPanel.getSrcFilePathText());
         state.setInterfaceFilePaths(settingPanel.getInterfaceFileText());
         state.setOutputFilePaths(settingPanel.getOutputFileText());
         state.setBaseClass(settingPanel.getBaseClassText());
-        state.setCollectionClass(settingPanel.getCollectionClassText());
-        state.setNonsupportClass(settingPanel.getNonsupportClassText());
-        state.setTemplateFilePaths(settingPanel.getTemplateText());
         storageService.loadState(state);
     }
 
