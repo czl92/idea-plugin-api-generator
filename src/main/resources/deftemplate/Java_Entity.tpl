@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.*;
 import java.util.*;
+import java.time.*;
+
 
 public class ${NAME} implements Serializable{
 

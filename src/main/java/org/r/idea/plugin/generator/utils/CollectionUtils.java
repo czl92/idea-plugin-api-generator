@@ -1,6 +1,7 @@
 package org.r.idea.plugin.generator.utils;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * @ClassName CollectionUtils
@@ -17,5 +18,12 @@ public class CollectionUtils {
         return !isEmpty(target);
     }
 
+    public static boolean isEmpty(Map<?, ?> map) {
+        return map == null || map.isEmpty();
+    }
+
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return isEmpty(map);
+    }
 
 }
