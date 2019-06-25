@@ -15,7 +15,7 @@ import org.r.idea.plugin.generator.core.exceptions.ClassNotFoundException;
 import org.r.idea.plugin.generator.core.nodes.Node;
 import org.r.idea.plugin.generator.impl.Utils;
 import org.r.idea.plugin.generator.impl.nodes.ParamNode;
-import org.springframework.util.CollectionUtils;
+import org.r.idea.plugin.generator.utils.CollectionUtils;
 
 /**
  * @ClassName ParamParser

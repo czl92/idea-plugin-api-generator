@@ -14,7 +14,8 @@ public class Utils {
 
 
     public static String[] baseClass = {"String", "Long", "int", "long", "char", "Integer", "double", "Double",
-        "BigDecimal"};
+        "BigDecimal","LocalDateTime","BigDecimal","boolean","Boolean","BindingResult"
+};
 
 
     /**

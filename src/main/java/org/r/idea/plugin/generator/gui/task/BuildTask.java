@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nls.Capitalization;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.r.generator.api.core.beans.ConfigBean;
 import org.r.idea.plugin.generator.core.Generator;
 import org.r.idea.plugin.generator.core.config.Config;
 import org.r.idea.plugin.generator.gui.beans.SettingState;
